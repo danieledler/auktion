@@ -30,38 +30,32 @@ const fikaData = [
   {
     name: "Kaffe",
     price: 20,
-    imageUrl:
-      "https://www.öob.se/storage/ma/325534a7213a46b183877132faf0a3b7/140255d78f4e4ebd9db6d1da8f6bb04c/558-480-0-jpg.Jpeg/9F8816AD470844C52E1B1D9E8BD26210740E1473/2_28690.jpeg",
+    imageUrl: "img/kaffe.jpg",
   },
   {
     name: "Kaka",
     price: 20,
-    imageUrl:
-      "https://i0.wp.com/lindasbakskola.se/app/uploads/sites/4/2017/06/sverigekaka6.jpg",
+    imageUrl: "img/kaka.jpg",
   },
   {
     name: "Korv",
     price: 25,
-    imageUrl:
-      "https://mb.cision.com/Public/151/9801247/aaf29112963ea076_800x800ar.jpg",
+    imageUrl: "img/korv.jpg",
   },
   {
     name: "Läsk",
     price: 15,
-    imageUrl:
-      "http://www.fruktdirekt.se/sites/default/files/imagecache/product_full/lask-png.png",
+    imageUrl: "img/läsk.jpg",
   },
   {
     name: "Mer",
     price: 15,
-    imageUrl:
-      "https://varsego.se/storage/8BC8C86A26D62161AE940D4DD2223D45ABD75DF17FCF364D9D8079C739D3C826/1feacaccb30d456ea7c733e3b83ca179/500-500-0-png.Png/media/756cad40c07041b7b143584da3af06a3/13883%20MER%20PA%CC%88RON%2020cl.png",
+    imageUrl: "img/mer.jpg",
   },
   {
     name: "Godis",
     price: 10,
-    imageUrl:
-      "https://static.mathem.se/shared/images/products/large/06411401037191_g1l1.jpg",
+    imageUrl: "img/godis.jpg",
   },
 ];
 
@@ -149,7 +143,7 @@ class Fika {
 
   onChangePaid = action((event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    this.paid = value ? Number(value) : undefined;
+    this.paid = value && Number(value) ? Number(value) : undefined;
   });
 }
 
