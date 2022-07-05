@@ -2,21 +2,29 @@ import {
   Box,
   Button,
   Container,
+  FormControl,
+  FormHelperText,
+  FormLabel,
   Heading,
   IconButton,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
   SimpleGrid,
   Spacer,
   Stat,
+  StatHelpText,
   StatLabel,
   StatNumber,
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { CloseIcon, DeleteIcon } from "@chakra-ui/icons";
 import { action, computed, makeObservable, observable } from "mobx";
 import { observer } from "mobx-react";
 import Image from "./Image";
-import Link from "next/link";
+import { ChangeEvent } from "react";
 
 const fikaData = [
   {
@@ -32,16 +40,22 @@ const fikaData = [
       "https://i0.wp.com/lindasbakskola.se/app/uploads/sites/4/2017/06/sverigekaka6.jpg",
   },
   {
-    name: "Korv m. bröd",
+    name: "Korv",
     price: 25,
     imageUrl:
       "https://mb.cision.com/Public/151/9801247/aaf29112963ea076_800x800ar.jpg",
   },
   {
-    name: "Dricka",
+    name: "Läsk",
     price: 15,
     imageUrl:
       "http://www.fruktdirekt.se/sites/default/files/imagecache/product_full/lask-png.png",
+  },
+  {
+    name: "Mer",
+    price: 15,
+    imageUrl:
+      "https://varsego.se/storage/8BC8C86A26D62161AE940D4DD2223D45ABD75DF17FCF364D9D8079C739D3C826/1feacaccb30d456ea7c733e3b83ca179/500-500-0-png.Png/media/756cad40c07041b7b143584da3af06a3/13883%20MER%20PA%CC%88RON%2020cl.png",
   },
   {
     name: "Godis",
@@ -94,12 +108,15 @@ class FikaItem {
 
 class Fika {
   items: FikaItem[] = [];
+  paid?: number = undefined;
 
   constructor() {
     this.items = fikaData.map((d) => new FikaItem(d.name, d.price, d.imageUrl));
     makeObservable(this, {
+      paid: observable,
       totalQuantity: computed,
       totalPrice: computed,
+      return: computed,
       none: computed,
     });
   }
@@ -112,12 +129,27 @@ class Fika {
     return this.items.reduce((total, item) => total + item.totalPrice, 0);
   }
 
+  get return() {
+    // TODO: Why doesn't this.paid ?? this.paid - this.totalPrice work?
+    return this.paid == null ? null : this.paid - this.totalPrice;
+  }
+
   get none() {
     return this.totalQuantity === 0;
   }
 
   reset = action(() => {
     this.items.forEach((item) => item.reset());
+    this.resetPaid();
+  });
+
+  resetPaid = action(() => {
+    this.paid = undefined;
+  });
+
+  onChangePaid = action((event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    this.paid = value ? Number(value) : undefined;
   });
 }
 
@@ -125,14 +157,15 @@ const fika = new Fika();
 
 const FikaItemView = observer(function _FikaItemView({
   fikaItem,
+  last,
 }: {
   fikaItem: FikaItem;
+  last?: boolean;
 }) {
   return (
     <Box
-      borderWidth="1px"
-      borderRadius="lg"
-      p={3}
+      borderBottomWidth={last ? "4px" : "1px"}
+      pb={2}
       alignItems="center"
       display="flex"
       width="100%"
@@ -142,8 +175,8 @@ const FikaItemView = observer(function _FikaItemView({
         <Image
           src={fikaItem.imageUrl}
           alt={fikaItem.name}
-          width={50}
-          height={50}
+          width={40}
+          height={40}
         />
         <Heading
           as="h2"
@@ -172,15 +205,13 @@ const FikaItemView = observer(function _FikaItemView({
             {" "}
             -{" "}
           </Button>
-          <Stat px={3} mt={-5}>
-            <StatLabel>Antal</StatLabel>
+          <Stat px={3}>
             <StatNumber textAlign="right">{fikaItem.quantity}</StatNumber>
           </Stat>
           <Button onClick={fikaItem.increase}> + </Button>
         </Box>
         <Box maxW={100} minW={100} ml={10} display="flex" alignItems="flex-end">
-          <Stat px={3} mt={-5}>
-            <StatLabel>Totalt</StatLabel>
+          <Stat px={3} color="gray.400">
             <StatNumber>{fikaItem.totalPrice} kr</StatNumber>
           </Stat>
         </Box>
@@ -192,31 +223,70 @@ const FikaItemView = observer(function _FikaItemView({
 export default observer(function Auktionsfika() {
   return (
     <Box>
-      <Heading textAlign="center" as="h1" size="xl" mt={1} mb={0}>
+      <Heading
+        textAlign="center"
+        as="h1"
+        size="xl"
+        mt={1}
+        mb={0}
+        display="none"
+      >
         Auktionsfika
       </Heading>
       <Box as="section" minH="100vh" display="flex" flexDir="column" pb={2}>
         <Container maxW="container.xl">
-          <VStack spacing="20px" mt={4} pb={10}>
-            {fika.items.map((item) => (
-              <FikaItemView key={item.name} fikaItem={item} />
+          <VStack spacing="20px" mt={4} mb={2}>
+            {fika.items.map((item, i) => (
+              <FikaItemView
+                key={i}
+                fikaItem={item}
+                last={i === fika.items.length - 1}
+              />
             ))}
           </VStack>
-          <Box display="flex" alignItems="stretch">
-            <Heading as="h2" size="lg" mx={4} color="gray.600">
-              Totalt {fika.totalQuantity} varor
-            </Heading>
+          <Box display="flex" alignItems="center">
+            <FormControl maxWidth={90}>
+              <FormLabel maxWidth={90}>Totalt</FormLabel>
+              <InputGroup maxWidth={90}>
+                <InputLeftElement>
+                  <DeleteIcon
+                    color={fika.none ? "gray.300" : "black"}
+                    onClick={fika.reset}
+                  />
+                </InputLeftElement>
+                <Input
+                  maxWidth={90}
+                  type="number"
+                  value={fika.totalQuantity}
+                  readOnly
+                  border="none"
+                />
+              </InputGroup>
+              <FormHelperText maxWidth={90}>varor</FormHelperText>
+            </FormControl>
 
-            <IconButton
-              mr={10}
-              aria-label="Rensa"
-              icon={<DeleteIcon />}
-              disabled={fika.none}
-              onClick={fika.reset}
-            />
+            <FormControl w={130}>
+              <FormLabel>Betalt</FormLabel>
+              <InputGroup size="md">
+                <InputLeftElement pointerEvents="none" color="gray.300">
+                  kr
+                </InputLeftElement>
+                <Input
+                  type="number"
+                  value={fika.paid === undefined ? "" : fika.paid}
+                  onChange={fika.onChangePaid}
+                />
+                {fika.paid && (
+                  <InputRightElement>
+                    <CloseIcon color="gray.300" onClick={fika.resetPaid} />
+                  </InputRightElement>
+                )}
+              </InputGroup>
+              <FormHelperText>{fika.return} tillbaks</FormHelperText>
+            </FormControl>
 
             <Spacer />
-            <Heading as="h2" size="lg" mx={4} color="black">
+            <Heading as="h2" size="lg" mx={4} color="black" display="inline">
               {fika.totalPrice} kr
             </Heading>
           </Box>

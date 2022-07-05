@@ -7,8 +7,8 @@ const Home: NextPage = () => {
   return (
     <Box>
       <Head>
-        <title>Axelssons auktioner</title>
-        <meta name="description" content="Axelssons auktioner" />
+        <title>Auktionsfika</title>
+        <meta name="description" content="Auktionsfika" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
