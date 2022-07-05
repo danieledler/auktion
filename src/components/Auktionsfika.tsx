@@ -159,56 +159,49 @@ const FikaItemView = observer(function _FikaItemView({
   return (
     <Box
       borderBottomWidth={last ? "4px" : "1px"}
-      pb={2}
+      pb={1}
       alignItems="center"
       display="flex"
       width="100%"
-      flexDir={["column", "row"]}
     >
-      <Box display="flex" alignItems="center" w="100%" mb={2}>
-        <Image
-          src={fikaItem.imageUrl}
-          alt={fikaItem.name}
-          width={40}
-          height={40}
-        />
-        <Heading
-          as="h2"
-          size="lg"
-          // wordBreak="break-word"
-          // w={110}
-          mx={4}
-          color="gray.600"
-        >
-          {fikaItem.name}
-        </Heading>
-        <Text color="gray.600">{fikaItem.price} kr/st</Text>
-      </Box>
+      <Image
+        src={fikaItem.imageUrl}
+        alt={fikaItem.name}
+        width={40}
+        height={40}
+      />
+      <Heading
+        as="h2"
+        size="lg"
+        // wordBreak="break-word"
+        // w={110}
+        mx={4}
+        color="gray.600"
+      >
+        {fikaItem.name}
+      </Heading>
 
-      <Box display="flex" alignItems="center" pl={7}>
-        <Spacer />
-        <IconButton
-          mr={10}
-          aria-label="Rensa"
-          icon={<DeleteIcon />}
-          disabled={fikaItem.none}
-          onClick={fikaItem.reset}
-        />
+      <Spacer />
+      <IconButton
+        mr={10}
+        aria-label="Rensa"
+        icon={<DeleteIcon />}
+        disabled={fikaItem.none}
+        onClick={fikaItem.reset}
+      />
+      <Box display="flex" alignItems="center" flexDir="column">
+        <Text color="gray.500">{fikaItem.price} kr/st</Text>
         <Box display="flex" alignItems="center">
           <Button onClick={fikaItem.decrease} disabled={fikaItem.none}>
             {" "}
             -{" "}
           </Button>
-          <Stat px={3}>
+          <Stat px={3} w={20}>
             <StatNumber textAlign="right">{fikaItem.quantity}</StatNumber>
           </Stat>
           <Button onClick={fikaItem.increase}> + </Button>
         </Box>
-        <Box maxW={100} minW={100} ml={10} display="flex" alignItems="flex-end">
-          <Stat px={3} color="gray.400">
-            <StatNumber>{fikaItem.totalPrice} kr</StatNumber>
-          </Stat>
-        </Box>
+        <Text color="gray.500">Totalt {fikaItem.totalPrice} kr</Text>
       </Box>
     </Box>
   );
@@ -229,7 +222,7 @@ export default observer(function Auktionsfika() {
       </Heading>
       <Box as="section" minH="100vh" display="flex" flexDir="column" pb={2}>
         <Container maxW="container.xl">
-          <VStack spacing="20px" mt={4} mb={2}>
+          <VStack mt={4} mb={2}>
             {fika.items.map((item, i) => (
               <FikaItemView
                 key={i}
