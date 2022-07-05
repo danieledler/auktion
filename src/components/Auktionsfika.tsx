@@ -10,6 +10,7 @@ import {
   StatLabel,
   StatNumber,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { action, computed, makeObservable, observable } from "mobx";
@@ -134,46 +135,55 @@ const FikaItemView = observer(function _FikaItemView({
       p={3}
       alignItems="center"
       display="flex"
+      width="100%"
+      flexDir={["column", "row"]}
     >
-      <Image
-        src={fikaItem.imageUrl}
-        alt={fikaItem.name}
-        width={50}
-        height={50}
-      />
-      <Heading as="h2" size="lg" mx={4} color="gray.600">
-        {fikaItem.name}
-      </Heading>
-      <Stat px={3} pb={5}>
-        <StatLabel>Pris/st</StatLabel>
-        <StatNumber>{fikaItem.price} kr</StatNumber>
-      </Stat>
-
-      <IconButton
-        mr={10}
-        aria-label="Rensa"
-        icon={<DeleteIcon />}
-        disabled={fikaItem.none}
-        onClick={fikaItem.reset}
-      />
-
-      <Box display="flex" alignItems="center">
-        <Button onClick={fikaItem.decrease} disabled={fikaItem.none}>
-          {" "}
-          -{" "}
-        </Button>
-        <Stat px={3} pb={5}>
-          <StatLabel>Antal</StatLabel>
-          <StatNumber textAlign="right">{fikaItem.quantity}</StatNumber>
-        </Stat>
-        <Button onClick={fikaItem.increase}> + </Button>
+      <Box display="flex" alignItems="center" w="100%" mb={2}>
+        <Image
+          src={fikaItem.imageUrl}
+          alt={fikaItem.name}
+          width={50}
+          height={50}
+        />
+        <Heading
+          as="h2"
+          size="lg"
+          // wordBreak="break-word"
+          // w={110}
+          mx={4}
+          color="gray.600"
+        >
+          {fikaItem.name}
+        </Heading>
+        <Text color="gray.600">{fikaItem.price} kr/st</Text>
       </Box>
 
-      <Box minW={100} ml={10} display="flex" alignItems="flex-end">
-        <Stat px={3} pb={5}>
-          <StatLabel>Totalt</StatLabel>
-          <StatNumber>{fikaItem.totalPrice} kr</StatNumber>
-        </Stat>
+      <Box display="flex" alignItems="center" pl={7}>
+        <Spacer />
+        <IconButton
+          mr={10}
+          aria-label="Rensa"
+          icon={<DeleteIcon />}
+          disabled={fikaItem.none}
+          onClick={fikaItem.reset}
+        />
+        <Box display="flex" alignItems="center">
+          <Button onClick={fikaItem.decrease} disabled={fikaItem.none}>
+            {" "}
+            -{" "}
+          </Button>
+          <Stat px={3} mt={-5}>
+            <StatLabel>Antal</StatLabel>
+            <StatNumber textAlign="right">{fikaItem.quantity}</StatNumber>
+          </Stat>
+          <Button onClick={fikaItem.increase}> + </Button>
+        </Box>
+        <Box maxW={100} minW={100} ml={10} display="flex" alignItems="flex-end">
+          <Stat px={3} mt={-5}>
+            <StatLabel>Totalt</StatLabel>
+            <StatNumber>{fikaItem.totalPrice} kr</StatNumber>
+          </Stat>
+        </Box>
       </Box>
     </Box>
   );
@@ -182,16 +192,16 @@ const FikaItemView = observer(function _FikaItemView({
 export default observer(function Auktionsfika() {
   return (
     <Box>
-      <Heading textAlign="center" as="h1" size="2xl" mt={2} mb={4}>
+      <Heading textAlign="center" as="h1" size="xl" mt={1} mb={0}>
         Auktionsfika
       </Heading>
-      <Box as="section" minH="100vh" display="flex" flexDir="column" pb={100}>
+      <Box as="section" minH="100vh" display="flex" flexDir="column" pb={2}>
         <Container maxW="container.xl">
-          <SimpleGrid columns={1} spacing="20px" mt={4} pb={10}>
+          <VStack spacing="20px" mt={4} pb={10}>
             {fika.items.map((item) => (
               <FikaItemView key={item.name} fikaItem={item} />
             ))}
-          </SimpleGrid>
+          </VStack>
           <Box display="flex" alignItems="stretch">
             <Heading as="h2" size="lg" mx={4} color="gray.600">
               Totalt {fika.totalQuantity} varor
