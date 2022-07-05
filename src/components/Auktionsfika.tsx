@@ -48,8 +48,8 @@ const fikaData = [
     imageUrl: "img/läsk.jpg",
   },
   {
-    name: "Mer",
-    price: 15,
+    name: "Festis",
+    price: 10,
     imageUrl: "img/mer.jpg",
   },
   {
@@ -159,7 +159,9 @@ const FikaItemView = observer(function _FikaItemView({
   return (
     <Box
       borderBottomWidth={last ? "4px" : "1px"}
-      pb={1}
+      borderBottomColor="gray.600"
+      pb={2}
+      pt={1}
       alignItems="center"
       display="flex"
       width="100%"
