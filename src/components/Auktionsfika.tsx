@@ -170,16 +170,12 @@ const FikaItemView = observer(function _FikaItemView({
         width={40}
         height={40}
       />
-      <Heading
-        as="h2"
-        size="lg"
-        // wordBreak="break-word"
-        // w={110}
-        mx={4}
-        color="gray.600"
-      >
-        {fikaItem.name}
-      </Heading>
+      <Box display="flex" alignContent="flex-start" flexDir="column" ml={2}>
+        <Heading as="h4" size="lg" color="gray.600">
+          {fikaItem.name}
+        </Heading>
+        <Text color="gray.500">{fikaItem.price} kr/st</Text>
+      </Box>
 
       <Spacer />
       <IconButton
@@ -189,19 +185,15 @@ const FikaItemView = observer(function _FikaItemView({
         disabled={fikaItem.none}
         onClick={fikaItem.reset}
       />
-      <Box display="flex" alignItems="center" flexDir="column">
-        <Text color="gray.500">{fikaItem.price} kr/st</Text>
-        <Box display="flex" alignItems="center">
-          <Button onClick={fikaItem.decrease} disabled={fikaItem.none}>
-            {" "}
-            -{" "}
-          </Button>
-          <Stat px={3} w={20}>
-            <StatNumber textAlign="right">{fikaItem.quantity}</StatNumber>
-          </Stat>
-          <Button onClick={fikaItem.increase}> + </Button>
-        </Box>
-        <Text color="gray.500">Totalt {fikaItem.totalPrice} kr</Text>
+      <Box display="flex" alignItems="center">
+        <Button onClick={fikaItem.decrease} disabled={fikaItem.none}>
+          {" "}
+          -{" "}
+        </Button>
+        <Stat px={3} w={20}>
+          <StatNumber textAlign="right">{fikaItem.quantity}</StatNumber>
+        </Stat>
+        <Button onClick={fikaItem.increase}> + </Button>
       </Box>
     </Box>
   );
