@@ -44,7 +44,7 @@ const fikaData = [
   },
   {
     name: "Läsk",
-    price: 15,
+    price: 20,
     imageUrl: "img/läsk.jpg",
   },
   {
@@ -52,11 +52,11 @@ const fikaData = [
     price: 10,
     imageUrl: "img/mer.jpg",
   },
-  {
-    name: "Godis",
-    price: 10,
-    imageUrl: "img/godis.jpg",
-  },
+  // {
+  //   name: "Godis",
+  //   price: 10,
+  //   imageUrl: "img/godis.jpg",
+  // },
 ];
 
 class FikaItem {
